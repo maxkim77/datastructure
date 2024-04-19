@@ -340,8 +340,9 @@ rbTree.insert(83); rbTree.insert(5);
  \
   5R
 */
-  // rbTree.remove(29);
-
+//  rbTree.remove(29);
+//  rbTree.remove(7);
+//  rbTree.remove(5);
   /*
       42B
      /    \

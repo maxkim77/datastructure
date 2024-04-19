@@ -12,6 +12,7 @@ class Node {
     }
 }
 
+/* 살펴볼부분 */
 function treeHeight(root) {
     /*
     - root: 트리의 루트 노드
@@ -36,7 +37,7 @@ root.left.right = new Node(5);
 root.right.left = new Node(6);
 root.right.right = new Node(7);
 
-// 트리의 높이 계산
+// 이진트리의 높이 계산 하는 실습
 const height = treeHeight(root);
 
 console.log("이진 트리의 높이:", height);

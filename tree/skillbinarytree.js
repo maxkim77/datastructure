@@ -9,7 +9,11 @@ class TreeNode {
     }
 }
 
-class BinaryTree {
+class SkillBinaryTree {
+    /* 
+    스킬트리
+    이진 트리 클래스 를 어디다 적용할까? 하는 생각에 스킬트리를 구현해보았습니다.
+    */
     constructor() {
         this.root = null; // 이진 트리의 루트 노드
     }
@@ -38,7 +42,7 @@ class BinaryTree {
     }
 }
 
-const skillTree = new BinaryTree();
+const skillTree = new SkillBinaryTree();
 skillTree.addSkill("lv1. 파워슬래시");
 skillTree.addSkill("lv2. 데스스윙");
 skillTree.addSkill("lv2. 인크리즈패리");

@@ -57,18 +57,6 @@ class MaxHeap {
     }
 
     /*
-        최대 힙에서 루트 노드를 제거하고 반환하는 메서드
-    */
-    remove() {
-        if (this.arr.length === 0) return null;
-
-        const max = this.arr[0];
-        this.arr[0] = this.arr.pop();
-        this.#heapifyDownMax(0);
-        return max;
-    }
-
-    /*
         새로운 값이 추가된 후 최대 힙의 특성을 유지하기 위해 위로 재배치하는 메서드
         - index: 재배치를 시작할 인덱스
     */

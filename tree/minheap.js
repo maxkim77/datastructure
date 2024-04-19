@@ -53,13 +53,6 @@ class MinHeap {
         }
     }
 
-    /* 최소 힙에서 루트 노드를 제거하고 반환하는 메서드 */
-    remove() {
-        const root = this.arr[0];
-        this.arr[0] = this.arr.pop();
-        this.#heapifyDownMin(0);
-        return root;
-    }
 
     /* 힙 정렬을 수행하여 배열을 정렬된 상태로 반환하는 메서드 */
     sort() {

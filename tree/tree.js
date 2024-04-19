@@ -46,7 +46,7 @@ tree.root.children[1].push(8);
 
 tree.print();
 
-/*
+/* 전위 순회 출력 결과(중-왼-오)
    5
   / \
  2   7

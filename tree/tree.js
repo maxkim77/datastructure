@@ -1,9 +1,9 @@
+class Tree {
 /* Tree 클래스는 트리 자료구조를 나타냄
  constructor 메서드는 트리 초기화
  new 연산자는 객체를 생성
  전위 순위로 출력 :  루트 노드 -> 왼쪽 서브트리 -> 오른쪽 서브트리
 */
-class Tree {
     constructor(value){
         this.root = new Node(value);
     }
@@ -13,11 +13,12 @@ class Tree {
     }
 }
 
+
+class Node {
 /* Node 클래스는 트리의 노드를 나타냄
 children : 현재 노드의 자식노드를 저장하는 배열
 push : 메서드는 자식 노드를 추가
 */
-class Node {
     children = [];
     constructor(value){
         this.value = value;

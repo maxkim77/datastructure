@@ -1,4 +1,10 @@
 class TreeNode {
+    /*
+    트리 노드
+    - 트리 노드의 값
+    - 자식 노드들의 배열
+    - 자식 노드를 추가하는 메서드
+    */
     constructor(value) {
         this.value = value; // 트리 노드의 값
         this.children = []; // 자식 노드들의 배열

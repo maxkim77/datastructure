@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문서 아이템 검색</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Centers the content horizontally */
+            align-items: center; /* Centers content vertically */
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            background-color: #f5f5f5;
+    background-image: url('/tree/img/string.png');
+    background-size: cover;
+    background-position: center;
+        }
+        #searchInput {
+            width: 300px; /* Adjust width as necessary */
+            padding: 8px;
+            font-size: 16px;
+            text-align: center; /* Center text inside input box */
+        }
+        #dynamicSearchResults, .staticList {
+            list-style: none;
+            padding: 0;
+            width: 300px; /* Match input width */
+            margin-top: 5px;
+        }
+        #dynamicSearchResults {
+            background-color: #ffff99; /* Light yellow for notepad */
+            border: 2px solid #cccc66; /* Darker yellow for border */
+            padding: 10px;
+        }
+        li {
+            padding: 8px;
+            background-color: transparent; /* Ensure the li doesn't override the ul's background */
+            border-bottom: 1px dashed #cccc66; /* Dashed line to mimic notepad line */
+            text-align: left; /* Align text inside list items to left */
+        }
+        li:last-child {
+            border-bottom: none; /* No bottom border for the last item */
+        }
+        li:hover {
+            background-color: #f0f0f0; /* Hover effect */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>주문서 아이템 검색</h1>
+        <input type="text" id="searchInput" placeholder="주문서 아이템 검색">
+        <h2>목록</h2>
+        <ul id="dynamicSearchResults"></ul> <!-- Dynamic search results will be appended here -->
+        <ul class="staticList">
+            <li>이동 주문서</li>
+            <li>업그레이드 주문서</li>
+            <li>치유 주문서</li>
+            <li>방어 주문서</li>
+            <li>공격 주문서</li>
+        </ul>
+    </div>
+
+    <script>
+        class TrieNode {
+            constructor() {
+                this.children = {};
+                this.isEndOfWord = false;
+            }
+        }
+
+        class Trie {
+            constructor() {
+                this.root = new TrieNode();
+            }
+
+            insert(word) {
+                let node = this.root;
+                for (let char of word) {
+                    if (!node.children[char]) {
+                        node.children[char] = new TrieNode();
+                    }
+                    node = node.children[char];
+                }
+                node.isEndOfWord = true;
+            }
+
+            search(prefix) {
+                let node = this.root;
+                let result = [];
+                for (let char of prefix) {
+                    if (!node.children[char]) {
+                        return result; // Return empty array if no prefix match
+                    }
+                    node = node.children[char];
+                }
+                this._findAllItems(node, prefix, result);
+                return result;
+            }
+
+            _findAllItems(node, prefix, result) {
+                if (node.isEndOfWord) {
+                    result.push(prefix);
+                }
+                for (let char in node.children) {
+                    this._findAllItems(node.children[char], prefix + char, result);
+                }
+            }
+        }
+
+        const trie = new Trie();
+        const order_items = ["이동 초급 주문서", "이동 중급 주문서", "이동 고급 주문서", "업그레이드 초급 주문서", "업그레이드 중급 주문서", "치유 주문서", "치유 중급 주문서", "치유 고급 주문서", "업그레이드 고급 주문서", "방어 주문서", "방어 중급 주문서", "방어 고급 주문서","공격 주문서", "공격 중급 주문서", "공격 고급 주문서"];
+        order_items.forEach(item => trie.insert(item));
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const prefix = this.value.trim();
+            const dynamicSearchResults = document.getElementById('dynamicSearchResults');
+            dynamicSearchResults.innerHTML = '';
+            if (prefix === '') {
+                return;
+            }
+            const foundItems = trie.search(prefix);
+            foundItems.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item;
+                dynamicSearchResults.appendChild(listItem);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -13,6 +13,8 @@ class SkillBinaryTree {
     /* 
     스킬트리
     이진 트리 클래스 를 어디다 적용할까? 하는 생각에 스킬트리를 구현해보았습니다.
+    - 새로운 스킬을 추가하는 메서드
+    - 재귀적으로 스킬을 추가하는 메서드
     */
     constructor() {
         this.root = null; // 이진 트리의 루트 노드
@@ -51,7 +53,8 @@ skillTree.addSkill("lv3. 프로덕션실드");
 skillTree.addSkill("lv3. 배틀스탠스");
 skillTree.addSkill("lv3. 배틀크라이");
 
-// 스킬 트리를 출력하는 함수
+/* 스킬 트리를 출력하는 함수
+*/
 function printSkillTree(node, level = 1) {
     if (!node) return; // 노드가 없으면 종료
     console.log(`${node.value}`); // 현재 노드의 값을 출력

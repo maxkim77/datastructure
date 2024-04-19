@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Potion from Gift Boxes</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f5f5f5;
+    background-image: url('/graph/img/back.png');
+    background-size: cover;
+    background-position: center;
+  }
+
+  #gift-box-container {
+    display: flex; /* 컨테이너를 flex로 설정하여 선물 상자들을 가로로 배열 */
+  }
+
+  .gift-box {
+    width: 300px; /* 상자의 크기를 150px로 조정 */
+    height: 300px;
+    background-color: #f0f0f0;
+    background-image: url('/graph/img/gift.png');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .gift-box:hover {
+    background-color: #e0e0e0;
+  }
+
+  .present {
+    display: none;
+    position: absolute;
+    top: 50%; /* 상자 중앙에 텍스트 위치 */
+    left: 50%;
+    transform: translate(-50%, -50%); /* 텍스트를 정확히 중앙에 위치 */
+    color: black; /* 텍스트 색상을 검정색으로 변경 */
+    font-size: 16px; /* 텍스트 크기 조정 */
+  }
+</style>
+</head>
+<body>
+
+<div id="gift-box-container"></div>
+
+<script>
+  class Graph {
+    constructor() {
+      this.vertices = [];
+      this.edges = new Map();
+    }
+
+    addVertex(vertex) {
+      this.vertices.push(vertex);
+      this.edges.set(vertex, []);
+    }
+
+    addEdge(source, destination, weight) {
+      this.edges.get(source).push({ destination, weight });
+    }
+
+    getNeighbors(vertex) {
+      return this.edges.get(vertex);
+    }
+  }
+
+  const potions = [
+    { name: "초급전투의 포션", ratio: 1 },
+    { name: "중급전투의 포션", ratio: 1 },
+    { name: "나드카스 포션", ratio: 2 },
+    { name: "마나 포션", ratio: 2 },
+    { name: "드래곤나잇 버프포션", ratio: 4 }
+  ];
+
+  const graph = new Graph();
+  potions.forEach(potion => graph.addVertex(potion));
+  graph.addEdge(potions[0], potions[1], 1);
+  graph.addEdge(potions[0], potions[2], 2);
+  graph.addEdge(potions[1], potions[3], 2);
+  graph.addEdge(potions[2], potions[4], 1);
+  graph.addEdge(potions[3], potions[4], 1);
+
+  const container = document.getElementById("gift-box-container");
+
+  for (let i = 0; i < 5; i++) {
+    const giftBox = document.createElement("div");
+    giftBox.className = "gift-box";
+    const present = document.createElement("div");
+    present.className = "present";
+    giftBox.appendChild(present);
+    giftBox.addEventListener("click", function() {
+      this.style.backgroundImage = 'none'; // 배경 이미지 제거
+      this.style.backgroundColor = '#ffffff'; // 배경 색상 변경
+      present.style.display = "block"; // 텍스트 표시
+      const random = Math.random() * 10;
+      let cumulativeRatio = 0;
+      let selectedPotion;
+      for (const potion of potions) {
+        cumulativeRatio += potion.ratio;
+        if (random <= cumulativeRatio) {
+          selectedPotion = potion;
+          break;
+        }
+      }
+      present.textContent = selectedPotion.name; // 물약 이름 표시
+    });
+    container.appendChild(giftBox);
+  }
+</script>
+
+</body>
+</html>

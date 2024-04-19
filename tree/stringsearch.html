@@ -7,44 +7,44 @@
     <style>
         body {
             display: flex;
-            justify-content: center; /* Centers the content horizontally */
-            align-items: center; /* Centers content vertically */
-            min-height: 100vh; /* Full viewport height */
+            justify-content: center; /* 콘텐츠를 가로로 가운데 정렬 */
+            align-items: center; /* 콘텐츠를 세로로 가운데 정렬 */
+            min-height: 100vh; /* 뷰포트의 전체 높이로 설정 */
             margin: 0;
-            background-color: #f5f5f5;
-    background-image: url('/tree/img/string.png');
-    background-size: cover;
-    background-position: center;
+            background-color: #f5f5f5; /* 배경색 설정 */
+            background-image: url('/tree/img/string.png'); /* 배경 이미지 설정 */
+            background-size: cover; /* 배경 이미지를 화면에 꽉 차게 조정 */
+            background-position: center; /* 배경 이미지를 가운데로 정렬 */
         }
         #searchInput {
-            width: 300px; /* Adjust width as necessary */
+            width: 300px; /* 입력 상자의 너비 설정 */
             padding: 8px;
             font-size: 16px;
-            text-align: center; /* Center text inside input box */
+            text-align: center; /* 입력 상자 내 텍스트를 가운데 정렬 */
         }
         #dynamicSearchResults, .staticList {
             list-style: none;
             padding: 0;
-            width: 300px; /* Match input width */
+            width: 300px; /* 입력 상자의 너비와 일치 */
             margin-top: 5px;
         }
         #dynamicSearchResults {
-            background-color: #ffff99; /* Light yellow for notepad */
-            border: 2px solid #cccc66; /* Darker yellow for border */
+            background-color: #ffff99; /* 메모장처럼 연한 노란색 배경 */
+            border: 2px solid #cccc66; /* 테두리는 더 진한 노란색 */
             padding: 10px;
         }
         li {
             padding: 8px;
-            background-color: transparent; /* Ensure the li doesn't override the ul's background */
-            border-bottom: 1px dashed #cccc66; /* Dashed line to mimic notepad line */
-            text-align: left; /* Align text inside list items to left */
+            background-color: transparent; /* li 요소가 ul의 배경을 덮지 않도록 설정 */
+            border-bottom: 1px dashed #cccc66; /* 메모장 선을 모방하기 위한 점선 테두리 */
+            text-align: left; /* 리스트 항목 내 텍스트를 왼쪽 정렬 */
         }
         li:last-child {
-            border-bottom: none; /* No bottom border for the last item */
+            border-bottom: none; /* 마지막 항목에는 하단 테두리 없음 */
         }
         li:hover {
-            background-color: #f0f0f0; /* Hover effect */
-            cursor: pointer;
+            background-color: #f0f0f0; /* 마우스를 올렸을 때 배경색 변경 */
+            cursor: pointer; /* 마우스 커서를 포인터로 변경 */
         }
     </style>
 </head>
@@ -53,7 +53,7 @@
         <h1>주문서 아이템 검색</h1>
         <input type="text" id="searchInput" placeholder="주문서 아이템 검색">
         <h2>목록</h2>
-        <ul id="dynamicSearchResults"></ul> <!-- Dynamic search results will be appended here -->
+        <ul id="dynamicSearchResults"></ul> <!-- 동적 검색 결과가 여기에 추가됩니다 -->
         <ul class="staticList">
             <li>이동 주문서</li>
             <li>업그레이드 주문서</li>
@@ -64,68 +64,76 @@
     </div>
 
     <script>
+        // Trie 노드 클래스
         class TrieNode {
             constructor() {
-                this.children = {};
-                this.isEndOfWord = false;
+                this.children = {}; // 자식 노드를 저장하는 객체
+                this.isEndOfWord = false; // 단어의 끝을 나타내는 플래그
             }
         }
 
+        // Trie 클래스
         class Trie {
             constructor() {
-                this.root = new TrieNode();
+                this.root = new TrieNode(); // 루트 노드 생성
             }
 
+            // 단어 삽입 메서드
             insert(word) {
                 let node = this.root;
-                for (let char of word) {
-                    if (!node.children[char]) {
-                        node.children[char] = new TrieNode();
+                for (let char of word) { // 단어의 각 문자에 대해
+                    if (!node.children[char]) { // 자식 노드에 문자가 없으면
+                        node.children[char] = new TrieNode(); // 새로운 노드 생성
                     }
-                    node = node.children[char];
+                    node = node.children[char]; // 노드 이동
                 }
-                node.isEndOfWord = true;
+                node.isEndOfWord = true; // 마지막 노드를 단어의 끝으로 표시
             }
 
+            // 접두사 검색 메서드
             search(prefix) {
                 let node = this.root;
                 let result = [];
-                for (let char of prefix) {
+                for (let char of prefix) { // 접두사의 각 문자에 대해
                     if (!node.children[char]) {
-                        return result; // Return empty array if no prefix match
+                        return result; // 일치하는 접두사가 없으면 빈 배열 반환
                     }
-                    node = node.children[char];
+                    node = node.children[char]; // 노드 이동
                 }
-                this._findAllItems(node, prefix, result);
+                this._findAllItems(node, prefix, result); // 모든 아이템을 찾음
                 return result;
             }
 
+            // 모든 아이템을 찾는 재귀적 메서드
             _findAllItems(node, prefix, result) {
-                if (node.isEndOfWord) {
-                    result.push(prefix);
+                if (node.isEndOfWord) { // 단어의 끝이면
+                    result.push(prefix); // 결과 배열에 추가
                 }
-                for (let char in node.children) {
+                for (let char in node.children) { // 모든 자식에 대해 재귀적으로 호출
                     this._findAllItems(node.children[char], prefix + char, result);
                 }
             }
         }
 
+        // Trie 객체 생성
         const trie = new Trie();
+        // 주문 아이템 목록
         const order_items = ["이동 초급 주문서", "이동 중급 주문서", "이동 고급 주문서", "업그레이드 초급 주문서", "업그레이드 중급 주문서", "치유 주문서", "치유 중급 주문서", "치유 고급 주문서", "업그레이드 고급 주문서", "방어 주문서", "방어 중급 주문서", "방어 고급 주문서","공격 주문서", "공격 중급 주문서", "공격 고급 주문서"];
-        order_items.forEach(item => trie.insert(item));
+        order_items.forEach(item => trie.insert(item)); // 아이템을 Trie에 삽입
 
+        // 검색어 입력 상자에 이벤트 리스너 추가
         document.getElementById('searchInput').addEventListener('input', function() {
-            const prefix = this.value.trim();
-            const dynamicSearchResults = document.getElementById('dynamicSearchResults');
-            dynamicSearchResults.innerHTML = '';
-            if (prefix === '') {
-                return;
+            const prefix = this.value.trim(); // 입력된 접두사 가져오기
+            const dynamicSearchResults = document.getElementById('dynamicSearchResults'); // 동적 검색 결과를 표시할 엘리먼트 가져오기
+            dynamicSearchResults.innerHTML = ''; // 이전 결과를 지우고
+            if (prefix === '') { // 입력이 비어있으면
+                return; // 함수 종료
             }
-            const foundItems = trie.search(prefix);
-            foundItems.forEach(item => {
-                const listItem = document.createElement('li');
-                listItem.textContent = item;
-                dynamicSearchResults.appendChild(listItem);
+            const foundItems = trie.search(prefix); // Trie에서 검색 결과 가져오기
+            foundItems.forEach(item => { // 각 검색 결과에 대해
+                const listItem = document.createElement('li'); // 새 li 요소 생성
+                listItem.textContent = item; // 텍스트 내용 설정
+                dynamicSearchResults.appendChild(listItem); // 동적 검색 결과 엘리먼트에 추가
             });
         });
     </script>

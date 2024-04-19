@@ -57,3 +57,15 @@ function printSkillTree(node, level = 1) {
 }
 
 printSkillTree(skillTree.root); // 스킬 트리 출력
+
+
+
+/*
+                         lv1. 파워슬래시
+                /                               \
+    lv2. 데스스윙                            lv2. 인크리즈패리
+         /     |                                |            \
+lv3. 실드스트라이크 lv3. 프로덕션실드  lv3. 배틀스탠스  lv3. 배틀크라이
+
+
+*/

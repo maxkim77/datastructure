@@ -98,7 +98,7 @@ graph.addEdge('B', 'C');
 */
 
 // 경로 찾기
-const start = 'B';
+const start = 'A';
 const end = 'E';
 const shortestPath = graph.dijkstra(start, end);
 console.log(`Shortest path from ${start} to ${end}:`, shortestPath.join(' -> '));
